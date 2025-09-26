@@ -1,0 +1,57 @@
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+#include <stdlib.h> 
+#include <math.h>   
+
+int* grayCode(int n, int* returnSize) {
+    *returnSize = 1 << n;
+    int size = *returnSize;
+    int* result = (int*)malloc(size * sizeof(int));
+    if (result == NULL) {
+        *returnSize = 0; 
+        return NULL;
+    }
+
+
+    if (n == 0) {
+        result[0] = 0;
+        *returnSize = 1;
+        return result;
+    }
+
+    result[0] = 0;
+    result[1] = 1;
+
+    for (int i = 2; i <= n; i++) {
+
+        int power_of_two = 1 << (i - 1); 
+        int current_len = 1 << (i - 1); 
+
+       
+        for (int j = current_len - 1; j >= 0; j--) {
+            result[current_len + (current_len - 1 - j)] = result[j] | power_of_two;
+            
+        }
+    }
+
+    return result;
+}
+
+// *Alternative and more concise bit manipulation solution:*
+/*
+int* grayCode(int n, int* returnSize) {
+    *returnSize = 1 << n;
+    int size = *returnSize;
+    int* result = (int*)malloc(size * sizeof(int));
+    if (result == NULL) {
+        *returnSize = 0;
+        return NULL;
+    }
+    for (int k = 0; k < size; k++) {
+        result[k] = k ^ (k >> 1);
+    }
+    
+    return result;
+}
+*/  
